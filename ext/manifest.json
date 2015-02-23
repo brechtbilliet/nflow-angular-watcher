@@ -1,0 +1,28 @@
+{
+  "name": "nflow Angular watcher",
+  "version": "1.0",
+  "manifest_version": 2,
+  "description": "This is an extension to show all the angular watchers on your page",
+  "homepage_url": "https://www.linkedin.com/pub/brecht-billiet/26/174/584?trk=pub-pbmap",
+  "icons": {
+    "16": "icons/ic16.png",
+    "48": "icons/ic48.png",
+    "128": "icons/ic128.png"
+  },
+  "default_locale": "en",
+  "browser_action": {
+    "default_icon": "icons/ic19.png",
+    "default_title": "page action demo"
+  },
+  "web_accessible_resources" : ["/js/core.js", "/js/destroy.js"],
+  "permissions": [
+    "activeTab",
+    "background",
+    "tabs",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "background": {
+    "scripts": ["src/bg/background.js"]
+  }
+}
