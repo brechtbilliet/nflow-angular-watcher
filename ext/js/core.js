@@ -77,11 +77,17 @@ var NgWatchHelper = function() {
 			label.css('z-index', maxZIndex);
 			var detailHtml = '<div class="nflow-watcher-detail" style="border: 3px solid ' + previousColor + ';padding: 10px; background: #fff; z-index:' + maxZIndex + '; position: absolute; left:' + Number(evt.clientX + 50) + 'px; top: ' + scopeElement.top + 'px;">';
 			detailHtml += '<strong>Scope id: ' + scopeElement.$scopeId + '</strong><br/>';
-			detailHtml += '<strong>Number of watchers: ' + scopeElement.specificWatches.length + '</strong>';
+			if(scopeElement.specificWatches){
+				detailHtml += '<strong>Number of watchers: ' +  scopeElement.specificWatches.length + '</strong>';
+			}
 			angular.forEach(scopeElement.specificWatches, function(watch) {
 				detailHtml += '<ul>';
-				detailHtml += '<li><strong>expression: </strong>' + (watch.exp.name|| watch.exp) + ' </li>';
-				detailHtml += '<li><strong>function: </strong>' + (watch.fn.name|| watch.exp) + ' </li>';
+				if(watch.exp){
+					detailHtml += '<li><strong>expression: </strong>' + (watch.exp.name|| watch.exp) + ' </li>';
+				}
+				if(watch.fn){
+					detailHtml += '<li><strong>function: </strong>' + (watch.fn.name|| watch.fn) + ' </li>';
+				}
 				detailHtml += '</ul>';
 			});
 			detailHtml += '<br/>';
