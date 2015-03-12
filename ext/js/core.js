@@ -130,10 +130,14 @@ var NgWatchHelper = function() {
 				$el.attr('data-nflow-watcher-id', i);
 				var height = $el.outerHeight();
 				scope = $el.scope();
+				var isolateScope = $el.isolateScope();
 				var specificWatches = 0;
 				if (scope.$$watchers !== null) {
 					specificWatches = scope.$$watchers.length;
 					watchers += specificWatches;
+					if(isolateScope && isolateScope.$$watchers){
+						watchers += isolateScope.$$watchers.length;
+					}
 				}
 				scopeElements.push({
 					top: offset.top,
@@ -157,7 +161,7 @@ var NgWatchHelper = function() {
 			angular.forEach(scopeElements, function(overlay) {
 				htmlStr += '<div class="nflow-watcher-overlay" id="nflow-watcher-overlay-' + overlay.id + '" style="background: none; pointer-events: none; display: block; position: absolute; border: 1px solid ' + overlay.color + '; top: ' + overlay.top + 'px; left: ' + overlay.left + 'px; width: ' + overlay.width + 'px; height: ' + overlay.height + 'px;"></div>';
 			});
-			htmlStrAllWatches = '<div class="nflow-watcher-watch-overlay" style="color: #ff0000; pointer-events: none; margin-left: 50px;; z-index: ' + normalZIndex + '; background: #000; padding: 10px; font-size: 14px; position: absolute; top: 0px; left: 0px;">' + watchers + ' watchers</div>';
+			htmlStrAllWatches = '<div class="nflow-watcher-watch-overlay" style="color: #ff0000; pointer-events: none; margin-left: 50px;; z-index: ' + maxZIndex + '; background: #000; padding: 10px; font-size: 14px; position: absolute; top: 0px; left: 0px;">' + watchers + ' watchers</div>';
 			handleEvents();
 			angular.element('body').append('<div class="nflow-watcher-generated">' + htmlStrAllWatches + htmlStr + htmlLabels + '</div>');
 		}
