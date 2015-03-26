@@ -58,7 +58,46 @@ var NgWatchHelper = function() {
 		});
 		return scopeElement;
 	}
+	function getWatchCount(el) {
+		var total = 0;
+		var scopeIds = {};
+		if(!el){
+			angular.forEach(
+				document.querySelectorAll( ".ng-scope , .ng-isolate-scope" ),
+				countWatchersInNode
+			);
+		}else{
+			var nodes = el.find('.ng-scope, .ng-isolate-scope');
+			if(el.hasClass('ng-scope') || el.hasClass('ng-isolate-scope')){
+				nodes.push(el);
+			}
+			angular.forEach(
+				nodes,
+				countWatchersInNode
+			);
+		}
+		return( total );
 
+		function countWatchersInNode( node ) {
+			var element = angular.element( node );
+			if ( element.hasClass( "ng-isolate-scope" ) && element.isolateScope ) {
+				countWatchersInScope( element.isolateScope() );
+			}
+			if ( element.hasClass( "ng-scope" ) ) {
+
+				countWatchersInScope( element.scope() );
+			}
+		}
+		function countWatchersInScope( scope ) {
+			if ( scopeIds.hasOwnProperty( scope.$id ) ) {
+				return;
+			}
+			scopeIds[ scope.$id ] = true;
+			if ( scope.$$watchers ) {
+				total += scope.$$watchers.length;
+			}
+		}
+	}
 	function handleEvents() {
 		function highlightOverlay(evt) {
 			evt.stopPropagation();
@@ -134,11 +173,8 @@ var NgWatchHelper = function() {
 				var specificWatches = 0;
 				if (scope.$$watchers !== null) {
 					specificWatches = scope.$$watchers.length;
-					watchers += specificWatches;
-					if(isolateScope && isolateScope.$$watchers){
-						watchers += isolateScope.$$watchers.length;
-					}
 				}
+				watchers = getWatchCount();
 				scopeElements.push({
 					top: offset.top,
 					left: offset.left,
